@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Scout24 Tech Challenge</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen" />
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+    <link href="../static/css/guru.css"
+          th:href="@{css/guru.css}" rel="stylesheet" media="screen"/>
+
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+    <h2>Scout24 Technical Challenge</h2>
+
+    <form class="form-horizontal" action="#" th:action="@{/htmlinfo}" th:object="${webDocument}" method="post">
+        <div class="form-group">
+            <label class="control-label col-sm-2">URL:</label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{uri}" class="form-control"/>
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+
+    <div th:if="${errorMsg.detail != ''}" class="alert alert-danger">
+        <strong>Danger!</strong> <span th:text="${errorMsg.detail}" />
+    </div>
+
+    <div th:if="${webDocument.htmlVersion != null}">
+        <h3>Analysis Result</h3>
+        <div class="panel panel-default">
+            <div class="table-responsive">
+                <table style="width:100%" border="1">
+                    <thead>
+                    <tr>
+                        <th class="tableCentered">Html Version</th>
+                        <th class="tableCentered">Title</th>
+                        <th class="tableCentered">Headings</th>
+                        <th class="tableCentered">Internal Links</th>
+                        <th class="tableCentered">External Links</th>
+                        <th class="tableCentered">Login Form</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${webDocument.htmlVersion}" />
+                        <td th:text="${webDocument.pageTitle}" />
+                        <td th:text="${webDocument.headingsMap}" />
+                        <td th:text="${webDocument.noOfInternalLinks}" />
+                        <td th:text="${webDocument.noOfExternalLinks}" />
+                        <td th:text="${webDocument.hasLoginForm}" />
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h3>Resource Validation</h3>
+        <div class="panel panel-default">
+            <div class="table-responsive">
+                <table style="width:100%" border="1">
+                    <thead>
+                    <tr>
+                        <th class="tableCentered">Resource</th>
+                        <th class="tableCentered">HTTP Response Code </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="document: ${webDocument.resourceValidationMap}">
+                        <td th:text="${document.key}" />
+                        <td th:text="${document.value}" />
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
